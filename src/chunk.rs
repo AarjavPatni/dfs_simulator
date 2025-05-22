@@ -16,16 +16,16 @@ fn main(filepath: String) -> Vec<(ChunkId, Chunk)> {
     let mut reader = BufReader::new(f);
     let mut chunks: Vec<(ChunkId, Chunk)> = vec![];
 
-
     loop {
-        let buf = reader.fill_buf().unwrap().to_owned();
+        let buf = reader.fill_buf().unwrap();
         if buf.is_empty() { break; }
 
-        let file_bytes: Vec<u8> = if buf.len() >= 64 { buf[..64].to_vec() } else { buf[..].to_vec() };
+        let chunk_size = buf.len().min(64);
+        let file_bytes: Vec<u8> = buf[..chunk_size].to_vec();
 
         // TODO: Understand in-depth how hashing really works
         let chunk_hash = Sha256::digest(&file_bytes);
-        let chunk_hash_str = format!("{:x}", chunk_hash);
+        let chunk_hash_str: ChunkId = format!("{:x}", chunk_hash);
 
         let chunk: Chunk = Chunk {
             data: file_bytes,
@@ -34,12 +34,7 @@ fn main(filepath: String) -> Vec<(ChunkId, Chunk)> {
         };
 
         chunks.push((chunk_hash_str, chunk));
-
-        if buf.len() >= 64 {
-            reader.consume(64);
-        } else {
-            reader.consume(buf.len());
-        }
+        reader.consume(chunk_size);
     }
 
     chunks
