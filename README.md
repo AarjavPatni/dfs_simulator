@@ -8,13 +8,11 @@ Inspirational parallels to GFS:
 * **Master + chunkserver mindset** (here: *coordinator* + *nodes*) keeps metadata centralised but datapath peer-to-peer.
 * **Replication & cheap hardware**: tolerate node loss by re-replicating or rebuilding from parity.
 
----
 
 ## Project Status
 
 **Under active development (pre-v1)**
 
----
 
 ## Goals / Feature Checklist
 
@@ -31,7 +29,6 @@ Inspirational parallels to GFS:
 * [ ] **Usage examples & retrospective** in README
 * [ ] **Stretch**: gRPC streaming, consistent-hash ring, Reed–Solomon erasure coding
 
----
 
 ## Planned Architecture
 
@@ -76,7 +73,6 @@ flowchart LR
 *Solid arrows*: data path.
 *Dashed arrows*: metadata / control.
 
----
 
 ## Anticipated Functionality
 
@@ -97,7 +93,6 @@ dfs-sim get iso/ubuntu.iso --out ./restore.iso
 
 Bring one node down (`Ctrl-C n1`) and repeat `dfs-sim get …` to watch parity recovery in logs.
 
----
 
 ## How it works (design details)
 
@@ -149,24 +144,19 @@ Planned with **`hyperfine`** (throughput) and **`cargo-flamegraph`** (hot spots)
 * Compression ratio vs. CPU cost
 * Restore latency under node loss
 
----
 
 ## References
 
 * Ghemawat S., Gobioff H., Leung S-T. [*The Google File System.*](https://pdos.csail.mit.edu/6.824/papers/gfs.pdf) SOSP 2003.
 * Project outline: [*dfs-simulator-project*](/assets/dfs-simulator-project.pdf) (pdf).
 
----
 
 ## How to Contribute
 
 Contributions are **welcome soon** once the core scaffolding stabilises. Feel free to open issues for design discussion; pull-requests will be reviewed after an initial public alpha.
 
----
 
 ## License
 
 Released under the **MIT License** – see [`LICENSE`](LICENSE) for details.
-
----
 
