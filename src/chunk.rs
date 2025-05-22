@@ -12,13 +12,15 @@ pub struct Chunk {
 }
 
 fn main(filepath: String) -> Vec<(ChunkId, Chunk)> {
-    let f = File::open("log.txt").expect("Unable to open file");
+    let f = File::open(filepath).expect("Unable to open file");
     let mut reader = BufReader::new(f);
     let mut chunks: Vec<(ChunkId, Chunk)> = vec![];
 
-    let mut buf = reader.fill_buf().expect("Couldn't create buffer!");
 
-    while !buf.is_empty() {
+    loop {
+        let buf = reader.fill_buf().unwrap().to_owned();
+        if buf.is_empty() { break; }
+
         let file_bytes: Vec<u8> = if buf.len() >= 64 { buf[..64].to_vec() } else { buf[..].to_vec() };
 
         // TODO: Understand in-depth how hashing really works
@@ -38,8 +40,6 @@ fn main(filepath: String) -> Vec<(ChunkId, Chunk)> {
         } else {
             reader.consume(buf.len());
         }
-
-        buf = reader.fill_buf().expect("Couldn't create buffer!");
     }
 
     chunks
