@@ -71,6 +71,7 @@ flowchart LR
 ```
 
 *Solid arrows*: data path.
+
 *Dashed arrows*: metadata / control.
 
 
