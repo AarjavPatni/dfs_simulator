@@ -70,8 +70,7 @@ flowchart LR
   CLI -->|replica / parity| N3
 ```
 
-*Solid arrows*: data path.
-
+*Solid arrows*: data path.  
 *Dashed arrows*: metadata / control.
 
 
