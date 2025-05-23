@@ -18,12 +18,12 @@ impl Node {
         }
     }
 
-    pub fn put_chunk(&mut self, data: Chunk) {
-        todo!()
+    pub fn put_chunk(&mut self, chunk: Chunk) {
+        self.chunks.insert(chunk.id.clone(), chunk);
     }
 
     pub fn get_chunk(&self, id: &ChunkId) -> Option<&Chunk> {
-        todo!()
+        self.chunks.get(id)
     }
 }
 
