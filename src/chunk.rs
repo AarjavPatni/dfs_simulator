@@ -3,8 +3,10 @@ use sha2::{Sha256, Digest};
 
 pub type ChunkId = String;
 
+#[derive(Debug)]
 pub struct ChunkMetadata;
 
+#[derive(Debug)]
 #[allow(dead_code)]
 pub struct Chunk {
     pub data: Vec<u8>,
@@ -26,7 +28,7 @@ pub fn chunk_file(filepath: &str) -> Vec<(ChunkId, Chunk)> {
         let chunk_size = buf.len().min(CHUNK_SIZE);
         let file_bytes: Vec<u8> = buf[..chunk_size].to_vec();
 
-        // TODO: Understand in-depth how hashing really works
+        // TODO: Understand hashing in-depth
         let chunk_hash = Sha256::digest(&file_bytes);
         let chunk_hash_str: ChunkId = format!("{:x}", chunk_hash);
 
@@ -51,7 +53,7 @@ mod tests {
 
     #[test]
     fn test_chunk_file_with_short_file() {
-        let path = "testfile.txt";
+        let path = "short_file.txt";
         let mut file = File::create(path).unwrap();
         writeln!(file, "Hello, world!").unwrap();
 
@@ -59,6 +61,18 @@ mod tests {
 
         assert_eq!(chunks.len(), 1);
         assert_eq!(chunks[0].1.data.len(), "Hello, world!\n".len());
+
+        remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn test_chunk_file_with_empty_file() {
+        let path = "empty_file.txt";
+        let _file = File::create(path).unwrap();
+
+        let chunks = chunk_file(path);
+
+        assert_eq!(chunks.len(), 0);
 
         remove_file(path).unwrap();
     }
