@@ -11,6 +11,7 @@ fn main() {
 
     match args.command {
         Command::Put { path, name } => {
+            let chunks = chunk::chunk_file(&path);
             println!("put");
         },
 
