@@ -6,6 +6,7 @@ pub type ChunkId = String;
 #[derive(Debug)]
 pub struct ChunkMetadata;
 
+#[derive(Clone)]
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct Chunk {

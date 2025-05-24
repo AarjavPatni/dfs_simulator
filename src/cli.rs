@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
 
+use crate::node::NodeId;
+
 // Basically tells clap to fill this struct from passed args
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -16,6 +18,10 @@ pub enum Command {
         path: String,
         #[arg(long)]
         name: Option<String>,
+        #[arg(long)]
+        nodes: NodeId,
+        #[arg(long)]
+        replicas: u32,
     },
 
     Get {
