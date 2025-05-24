@@ -3,6 +3,7 @@ use sha2::{Sha256, Digest};
 
 pub type ChunkId = String;
 
+#[derive(Clone)]
 #[derive(Debug)]
 pub struct ChunkMetadata;
 
