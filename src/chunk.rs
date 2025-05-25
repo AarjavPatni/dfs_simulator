@@ -16,7 +16,7 @@ pub struct Chunk {
     pub metadata: ChunkMetadata,
 }
 
-const CHUNK_SIZE: usize = 64;
+const CHUNK_SIZE: usize = 1024;
 
 pub fn chunk_hash_file(filepath: &str) -> Vec<Chunk> {
     let f = File::open(filepath).expect("Unable to open file");

@@ -38,20 +38,19 @@ fn main() {
             // compress and replicate chunks in nodes; add chunk to catalog
             for chunk in chunks {
                 let chunk_id = chunk.id.clone();
-                let osize = chunk.data.len();
+                let osize: f64 = chunk.data.len() as f64;
                 let compressed_chunk = compress_chunk(&chunk);
-                let csize = compressed_chunk.data.len();
-                let cratio = (csize / osize) * 100;
+                let csize: f64 = compressed_chunk.data.len() as f64;
+                let cratio = ((1.0 - (csize / osize)) * 100.0) as isize;
 
-                println!("Original chunk size: #{osize}");
-                println!("Compressed chunk {} → new size {}", chunk_id, csize);
-                println!("Compression ratio = {}", cratio);
+                println!("Compressed chunk {}", chunk_id);
+                println!("Change in size: {} → {}", osize, csize);
+                println!("Compression ratio = {}%", cratio);
+                println!("");
 
                 cursor = replicate::replicate(cursor, &mut nodes_vec, replicas, &compressed_chunk);
                 catalog.add_chunk(&path, chunk_id);
             }
-
-            println!("put");
         },
 
         Command::Get { name, out } => {
