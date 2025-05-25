@@ -18,7 +18,7 @@ pub struct Chunk {
 
 const CHUNK_SIZE: usize = 64;
 
-pub fn chunk_file(filepath: &str) -> Vec<(ChunkId, Chunk)> {
+pub fn chunk_hash_file(filepath: &str) -> Vec<(ChunkId, Chunk)> {
     let f = File::open(filepath).expect("Unable to open file");
     let mut reader = BufReader::new(f);
     let mut chunks: Vec<(ChunkId, Chunk)> = vec![];
@@ -59,7 +59,7 @@ mod tests {
         let mut file = File::create(path).unwrap();
         writeln!(file, "Hello, world!").unwrap();
 
-        let chunks = chunk_file(path);
+        let chunks = chunk_hash_file(path);
 
         assert_eq!(chunks.len(), 1);
         assert_eq!(chunks[0].1.data.len(), "Hello, world!\n".len());
@@ -72,7 +72,7 @@ mod tests {
         let path = "empty_file.txt";
         let _file = File::create(path).unwrap();
 
-        let chunks = chunk_file(path);
+        let chunks = chunk_hash_file(path);
 
         assert_eq!(chunks.len(), 0);
 
