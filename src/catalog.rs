@@ -10,9 +10,13 @@ pub struct Catalog {
 }
 
 impl Catalog {
-    pub fn register_file(&mut self, filename: String) {
-        if !self.files_to_chunks.contains_key(&filename) {
-            self.files_to_chunks.insert(filename, Vec::new());
+    pub fn new() -> Self {
+        Catalog { files_to_chunks: HashMap::new(), chunks_to_nodes: HashMap::new() }
+    }
+
+    pub fn register_file(&mut self, filename: &String) {
+        if !self.files_to_chunks.contains_key(filename) {
+            self.files_to_chunks.insert(filename.clone(), Vec::new());
         }
     }
 
