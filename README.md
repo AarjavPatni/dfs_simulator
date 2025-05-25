@@ -21,6 +21,7 @@ Inspirational parallels to GFS:
 * [x] **In-memory catalog** mapping `file → chunks → nodes`
 * [x] **Configurable replication factor** (round-robin placement)
 * [x] **LZ4 compression** on each chunk
+* [ ]   `put` Operation
 * [ ] **XOR parity per block-set**; offline node recovery
 * [ ] **Download path** involving checksum verification, decompression, & reassembly
 * [ ] **Benchmarks** with `hyperfine` + `flamegraphs`
