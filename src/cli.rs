@@ -21,7 +21,7 @@ pub enum Command {
         #[arg(long)]
         nodes: NodeId,
         #[arg(long)]
-        replicas: u32,
+        replicas: usize,
     },
 
     Get {

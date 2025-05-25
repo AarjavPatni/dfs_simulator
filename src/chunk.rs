@@ -18,10 +18,10 @@ pub struct Chunk {
 
 const CHUNK_SIZE: usize = 64;
 
-pub fn chunk_hash_file(filepath: &str) -> Vec<(ChunkId, Chunk)> {
+pub fn chunk_hash_file(filepath: &str) -> Vec<Chunk> {
     let f = File::open(filepath).expect("Unable to open file");
     let mut reader = BufReader::new(f);
-    let mut chunks: Vec<(ChunkId, Chunk)> = vec![];
+    let mut chunks: Vec<Chunk> = vec![];
 
     loop {
         let buf = reader.fill_buf().unwrap();
@@ -30,22 +30,22 @@ pub fn chunk_hash_file(filepath: &str) -> Vec<(ChunkId, Chunk)> {
         let chunk_size = buf.len().min(CHUNK_SIZE);
         let file_bytes: Vec<u8> = buf[..chunk_size].to_vec();
 
-        // TODO: Understand hashing in-depth
         let chunk_hash = Sha256::digest(&file_bytes);
         let chunk_hash_str: ChunkId = format!("{:x}", chunk_hash);
 
-        let chunk: Chunk = Chunk {
+        let chunk = Chunk {
             data: file_bytes,
-            id: chunk_hash_str.clone(),
+            id: chunk_hash_str,
             metadata: ChunkMetadata,
         };
 
-        chunks.push((chunk_hash_str, chunk));
+        chunks.push(chunk);
         reader.consume(chunk_size);
     }
 
     chunks
 }
+
 
 #[cfg(test)]
 mod tests {
