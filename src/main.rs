@@ -21,7 +21,7 @@ fn main() {
             let mut chunks = chunk::chunk_hash_file(&path);
             let mut nodes_vec: Vec<Node> = vec![];
 
-            // create catalog
+            // create catalog and register file
             let mut catalog = Catalog::new();
             catalog.register_file(&path);
 
@@ -32,7 +32,7 @@ fn main() {
 
             let mut cursor = 0;
 
-            // compress and replicate chunks in nodes
+            // compress and replicate chunks in nodes; add chunk to catalog
             for chunk in chunks {
                 let compressed_chunk = compress_chunk(&chunk);
                 cursor = replicate::replicate(cursor, &mut nodes_vec, replicas, &compressed_chunk);
