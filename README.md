@@ -19,7 +19,7 @@ Inspirational parallels to GFS:
 * [x] **CLI scaffold** via `clap` (`put`, `get`, `node`, `coord`)
 * [x] **Chunker**: fixed-size splitter + SHA-256 hash table + unit tests
 * [x] **In-memory catalog** mapping `file → chunks → nodes`
-* [ ] **Configurable replication factor** (round-robin placement)
+* [x] **Configurable replication factor** (round-robin placement)
 * [ ] **LZ4 compression** on each chunk
 * [ ] **XOR parity per block-set**; offline node recovery
 * [ ] **Download path** involving checksum verification, decompression, & reassembly
