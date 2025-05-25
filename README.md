@@ -20,7 +20,7 @@ Inspirational parallels to GFS:
 * [x] **Chunker**: fixed-size splitter + SHA-256 hash table + unit tests
 * [x] **In-memory catalog** mapping `file → chunks → nodes`
 * [x] **Configurable replication factor** (round-robin placement)
-* [ ] **LZ4 compression** on each chunk
+* [x] **LZ4 compression** on each chunk
 * [ ] **XOR parity per block-set**; offline node recovery
 * [ ] **Download path** involving checksum verification, decompression, & reassembly
 * [ ] **Benchmarks** with `hyperfine` + `flamegraphs`
