@@ -11,7 +11,7 @@ pub fn replicate(cursor: usize, nodes: &mut Vec<Node>, factor: usize, chunk: &Ch
     let mut current_factor = factor;
 
     while current_factor > 0 {
-        let idx = cursor % nodes.len();
+        let idx = current_cursor % nodes.len();
         nodes[idx].chunks.insert(chunk.id.clone(), chunk.clone());
         current_factor -= 1;
         current_cursor += 1;

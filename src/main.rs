@@ -13,8 +13,8 @@ fn main() {
     let args = Cli::parse();
 
     match args.command {
-        Command::Put { path, name, nodes, replicas } => {
-            commands::put(path, name, nodes, replicas);
+        Command::Put { path, nodes, replicas } => {
+            commands::put(path, nodes, replicas);
         },
 
         Command::Get { name, out } => {

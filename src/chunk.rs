@@ -62,7 +62,7 @@ mod tests {
         let chunks = chunk_hash_file(path);
 
         assert_eq!(chunks.len(), 1);
-        assert_eq!(chunks[0].1.data.len(), "Hello, world!\n".len());
+        assert_eq!(chunks[0].data.len(), "Hello, world!\n".len());
 
         remove_file(path).unwrap();
     }

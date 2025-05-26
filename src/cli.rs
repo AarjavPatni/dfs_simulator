@@ -17,8 +17,6 @@ pub enum Command {
     Put {
         path: String,
         #[arg(long)]
-        name: Option<String>,
-        #[arg(long)]
         nodes: NodeId,
         #[arg(long)]
         replicas: usize,
