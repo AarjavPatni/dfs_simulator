@@ -1,8 +1,10 @@
+use std::fs::File;
+use std::io::Write;
 use sha2::{Digest, Sha256};
 
 use crate::chunk::Chunk;
+use crate::{chunk};
 use crate::node::{NodeId, Node};
-use crate::{catalog, chunk};
 use crate::catalog::Catalog;
 use crate::compressor::{compress_chunk, decompress_chunk};
 use crate::replicate;
@@ -52,14 +54,14 @@ pub fn get(path: String) {
     // TODO: change this to use a persistent catalog and node
     let catalog = Catalog::new();
     let nodes = vec![Node::new(10), Node::new(20), Node::new(30)];
-    let chunks = catalog.lookup_file(&path).unwrap();
+    let chunk_ids = catalog.lookup_file(&path).unwrap();
 
     // 2. get the chunks from all the nodes. find the first one that passes the checksum
     //    verification. then store all of these in a vector.
     
     let mut chunk_vec: Vec<Chunk> = Vec::new();
     
-    for chunk_id in chunks {
+    for chunk_id in chunk_ids {
         // get all the chunks from each node
         let nodes_containing_chunk: &Vec<NodeId> = catalog.locate_chunk(chunk_id).unwrap();
         let mut found_valid_chunk = false;
@@ -88,8 +90,17 @@ pub fn get(path: String) {
         .map(|chunk| decompress_chunk(&chunk))
         .collect();
 
-    // 4. reassemble all the files in order
+    // 4. reassemble all the bytes in order. but how do we verify the order?
+    // TODO: Verify the order
+    // Currently assumes that the bytes are in order
 
+    let file_bytes: Vec<u8> = decompressed_chunk_vec
+        .into_iter()
+        .flat_map(|chunk| chunk.data)
+        .collect();
+
+    let mut target_file = File::create(path).unwrap();
+    target_file.write_all(&file_bytes);
 }
 
 
