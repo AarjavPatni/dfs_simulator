@@ -37,8 +37,9 @@ pub fn put(path: String, nodes: NodeId, replicas: usize) {
         println!("Compression ratio = {}%", cratio);
         println!();
 
-        cursor = replicate::replicate(cursor, &mut nodes_vec, replicas, &compressed_chunk);
-        catalog.add_chunk(&path, chunk_id);
+        let nodes_containing_chunk: Vec<NodeId>;
+        (cursor, nodes_containing_chunk) = replicate::replicate(cursor, &mut nodes_vec, replicas, &compressed_chunk);
+        catalog.add_chunk(&path, chunk_id, nodes_containing_chunk);
     }
 }
 

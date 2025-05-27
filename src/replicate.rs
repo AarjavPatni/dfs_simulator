@@ -1,7 +1,7 @@
 use crate::chunk::*;
 use crate::node::*;
 
-pub fn replicate(cursor: usize, nodes: &mut Vec<Node>, factor: usize, chunk: &Chunk) -> usize {
+pub fn replicate(cursor: usize, nodes: &mut Vec<Node>, factor: usize, chunk: &Chunk) -> (usize, Vec<NodeId>) {
     if nodes.len() < factor {
         // TODO: Switch out panic! for a more graceful error handling
         panic!("Replication factor cannot be greater than node count");
@@ -9,15 +9,30 @@ pub fn replicate(cursor: usize, nodes: &mut Vec<Node>, factor: usize, chunk: &Ch
 
     let mut current_cursor = cursor;
     let mut current_factor = factor;
+    let mut touched_indices: Vec<usize> = Vec::new();
 
     while current_factor > 0 {
         let idx = current_cursor % nodes.len();
+
+        // TODO: Understand why this doesn't work
+        // {
+        //     nodes[idx].chunks.insert(chunk.id.clone(), chunk.clone());
+        // }
+        // nodes_containing_chunk.push(&nodes[idx]);
+
         nodes[idx].chunks.insert(chunk.id.clone(), chunk.clone());
+
+        touched_indices.push(idx);
         current_factor -= 1;
         current_cursor += 1;
     }
 
-    current_cursor
+    let nodes_containing_chunk: Vec<NodeId> = touched_indices
+        .iter()
+        .map(|&i| nodes[i].id.clone())
+        .collect();
+
+    (current_cursor, nodes_containing_chunk)
 }
 
 
