@@ -1,7 +1,10 @@
+use sha2::{Digest, Sha256};
+
+use crate::chunk::Chunk;
 use crate::node::{NodeId, Node};
-use crate::chunk;
+use crate::{catalog, chunk};
 use crate::catalog::Catalog;
-use crate::compressor::compress_chunk;
+use crate::compressor::{compress_chunk, decompress_chunk};
 use crate::replicate;
 
 pub fn put(path: String, nodes: NodeId, replicas: usize) {
@@ -41,6 +44,52 @@ pub fn put(path: String, nodes: NodeId, replicas: usize) {
         (cursor, nodes_containing_chunk) = replicate::replicate(cursor, &mut nodes_vec, replicas, &compressed_chunk);
         catalog.add_chunk(&path, chunk_id, nodes_containing_chunk);
     }
+}
+
+pub fn get(path: String) {
+    // 1. get chunks from the filename
+    
+    // TODO: change this to use a persistent catalog and node
+    let catalog = Catalog::new();
+    let nodes = vec![Node::new(10), Node::new(20), Node::new(30)];
+    let chunks = catalog.lookup_file(&path).unwrap();
+
+    // 2. get the chunks from all the nodes. find the first one that passes the checksum
+    //    verification. then store all of these in a vector.
+    
+    let mut chunk_vec: Vec<Chunk> = Vec::new();
+    
+    for chunk_id in chunks {
+        // get all the chunks from each node
+        let nodes_containing_chunk: &Vec<NodeId> = catalog.locate_chunk(chunk_id).unwrap();
+        let mut found_valid_chunk = false;
+
+        // TODO: node id -> Node. also remove the cast
+        for node_id in nodes_containing_chunk {
+            let node = &nodes[*node_id as usize];
+            let chunk = node.get_chunk(chunk_id).unwrap();
+            let chunk_hash = format!("{:x}", Sha256::digest(&chunk.data));
+            
+            if chunk_hash == chunk.id {
+                chunk_vec.push(chunk.clone());
+                found_valid_chunk = true;
+                break;
+            }
+        }
+
+        if !found_valid_chunk {
+            panic!("Filesystem corrupted!");
+        }
+    }
+
+    // 3. decompress all the chunk
+    let decompressed_chunk_vec: Vec<Chunk> = chunk_vec
+        .into_iter()
+        .map(|chunk| decompress_chunk(&chunk))
+        .collect();
+
+    // 4. reassemble all the files in order
+
 }
 
 
