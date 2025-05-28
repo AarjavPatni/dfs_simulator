@@ -5,11 +5,17 @@ mod catalog;
 mod replicate;
 mod compressor;
 mod commands;
+mod state;
 
+use catalog::Catalog;
 use clap::Parser;
 use cli::{Cli, Command};
+use node::Node;
+use state::{load_state, save_state, State};
+
 
 fn main() {
+    let state = load_state();
     let args = Cli::parse();
 
     match args.command {
@@ -25,4 +31,6 @@ fn main() {
             println!("nodels")
         }
     }
+
+    save_state();
 }
