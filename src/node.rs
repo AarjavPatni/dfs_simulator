@@ -1,10 +1,14 @@
 use std::collections::HashMap;
 
+use serde::Deserialize;
+use serde::Serialize;
+
 use crate::chunk::*;
 use crate::catalog::*;
 
 pub type NodeId = u32;
 
+#[derive(Serialize, Deserialize)]
 pub struct Node {
     pub id: NodeId,
     pub chunks: HashMap<ChunkId, Chunk>,

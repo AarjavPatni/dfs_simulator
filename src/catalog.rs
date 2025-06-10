@@ -1,9 +1,12 @@
 use std::collections::HashMap;
 
+use serde::{Deserialize, Serialize};
+
 use crate::{chunk::ChunkId, node::{Node, NodeId}};
 
 // TODO: Add Mutex to avoid data races
 
+#[derive(Serialize, Deserialize)]
 pub struct Catalog {
     files_to_chunks: HashMap<String, Vec<ChunkId>>,
     chunks_to_nodes: HashMap<ChunkId, Vec<NodeId>>,
